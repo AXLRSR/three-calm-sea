@@ -157,7 +157,21 @@ const tick = () =>
 
     // Animate water
     water.material.uniforms['time'].value = elapsedTime * 0.5
-    console.log(orientation)
+
+    // Update sky
+    const time = ((new Date().getTime() / 1000) % 86400) / 86400
+    const orientation = 0.5 + time * 2
+    const rayleigh = Math.abs(Math.sin(time * Math.PI * 2) * 2)
+
+    const skyUniforms = sky.material.uniforms
+    skyUniforms['rayleigh'].value = rayleigh
+
+    const theta = Math.PI * (orientation)
+
+    sun.y = Math.sin(phi) * Math.sin(theta)
+    sun.z = Math.sin(phi) * Math.cos(theta)
+
+    skyUniforms['sunPosition'].value.copy(sun)
 
     // Update controls
     controls.update()
