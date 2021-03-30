@@ -3,23 +3,15 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Water } from 'three/examples/jsm/objects/Water.js'
 import { Sky } from 'three/examples/jsm/objects/Sky.js'
-import * as dat from 'dat.gui'
 
 /**
  * Base
  */
-// Debug
-// const gui = new dat.GUI()
-
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
-
-// Helpers
-// const axesHelper = new THREE.AxesHelper()
-// scene.add(axesHelper)
 
 /**
  * Textures
@@ -71,16 +63,6 @@ const waterUniforms = water.material.uniforms
 waterUniforms['size'].value = 10
 
 scene.add(water)
-
-/**
- * Lights
- */
-// const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
-// scene.add(ambientLight)
-
-// const pointLight = new THREE.PointLight(0xffffff, 10)
-// pointLight.position.y = 3
-// scene.add(pointLight)
 
 /**
  * Sizes
@@ -140,14 +122,6 @@ const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
     antialias: true
 })
-renderer.shadowMap.enabled = true
-renderer.shadowMap.type = THREE.PCFShadowMap
-renderer.physicallyCorrectLights = true
-// renderer.outputEncoding = THREE.sRGBEncoding
-// renderer.toneMapping = THREE.ReinhardToneMapping
-renderer.outputEncoding = THREE.LinearEncoding
-renderer.toneMapping = THREE.NoToneMapping
-renderer.toneMappingExposure = 1.5
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
@@ -182,7 +156,6 @@ commandInput.addEventListener('keydown', (e) =>
         commandInput.style.display = 'none'
     }
 })
-
 
 /**
  * Animate
