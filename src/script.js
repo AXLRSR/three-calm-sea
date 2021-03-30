@@ -118,6 +118,22 @@ const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
 /**
+ * Sounds
+ */
+const listener = new THREE.AudioListener()
+camera.add(listener)
+
+const sound = new THREE.Audio(listener)
+
+const audioLoader = new THREE.AudioLoader()
+audioLoader.load('/sounds/sea/waves.mp3', function(buffer) {
+    sound.setBuffer(buffer)
+    sound.setLoop(true)
+    sound.setVolume(0.08)
+    sound.play()
+})
+
+/**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
@@ -178,7 +194,7 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Animate water
-    water.material.uniforms['time'].value = elapsedTime * 0.5
+    water.material.uniforms['time'].value = elapsedTime * 0.8
 
     // Update sky
     let time = null
