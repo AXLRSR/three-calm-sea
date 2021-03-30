@@ -34,11 +34,6 @@ waterNormalTexture.wrapS = waterNormalTexture.wrapT = THREE.RepeatWrapping
  * Meshes
  */
 // Sky
-const time = ((new Date().getTime() / 1000) % 86400) / 86400 // 0 -> 1
-// const time = 0.747 // 0 -> 1
-const orientation = 0.5 + time * 2 // 0.5 -> 2.5
-const rayleigh = Math.abs(Math.sin(time * Math.PI * 2) * 2) // 0 -> 2 -> 0 -> 2 -> 0
-
 const sky = new Sky()
 sky.scale.setScalar(45000)
 
@@ -46,18 +41,12 @@ const sun = new THREE.Vector3()
 
 const skyUniforms = sky.material.uniforms
 skyUniforms['turbidity'].value = 10
-skyUniforms['rayleigh'].value = rayleigh
 skyUniforms['mieCoefficient'].value = 0.005
 skyUniforms['mieDirectionalG'].value = 0.6
 
-const theta = Math.PI * (orientation)
 const phi = 2 * Math.PI * (0.25 - 0.5)
 
 sun.x = Math.cos(phi)
-sun.y = Math.sin(phi) * Math.sin(theta)
-sun.z = Math.sin(phi) * Math.cos(theta)
-
-skyUniforms['sunPosition'].value.copy(sun)
 
 scene.add(sky)
 
@@ -147,6 +136,39 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 /**
+ * Command input
+ */
+const commandInput = document.querySelector('.command__input')
+let commandInputNumber = null
+
+window.addEventListener('keydown', (e) =>
+{
+    if(e.key === '/')
+    {
+        commandInput.style.display = 'block'
+        commandInput.focus()
+    }
+})
+
+commandInput.addEventListener('keydown', (e) =>
+{
+    if(e.key === 'Enter')
+    {
+        let commandInputValue = commandInput.value
+
+        if(/^\/time set /.test(commandInputValue))
+        {
+            let commandInputArray = commandInputValue.split(' ')
+            commandInputNumber = parseInt(commandInputArray[commandInputArray.length - 1])
+        }
+
+        commandInput.value = ''
+        commandInput.style.display = 'none'
+    }
+})
+
+
+/**
  * Animate
  */
 const clock = new THREE.Clock()
@@ -159,14 +181,22 @@ const tick = () =>
     water.material.uniforms['time'].value = elapsedTime * 0.5
 
     // Update sky
-    const time = ((new Date().getTime() / 1000) % 86400) / 86400
-    const orientation = 0.5 + time * 2
-    const rayleigh = Math.abs(Math.sin(time * Math.PI * 2) * 2)
+    let time = null
+    
+    if(commandInputNumber !== null)
+    {
+        time = commandInputNumber / 1000
+    } else {
+        time = ((new Date().getTime() / 1000) % 86400) / 86400
+    }
+    
+    let orientation = 0.5 + time * 2
+    let rayleigh = Math.abs(Math.sin(time * Math.PI * 2) * 2)
 
-    const skyUniforms = sky.material.uniforms
+    let skyUniforms = sky.material.uniforms
     skyUniforms['rayleigh'].value = rayleigh
 
-    const theta = Math.PI * (orientation)
+    let theta = Math.PI * (orientation)
 
     sun.y = Math.sin(phi) * Math.sin(theta)
     sun.z = Math.sin(phi) * Math.cos(theta)

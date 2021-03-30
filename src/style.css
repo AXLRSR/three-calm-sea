@@ -1,19 +1,43 @@
-*
-{
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@700&display=swap');
+
+* {
     margin: 0;
     padding: 0;
 }
 
-html,
-body
-{
-    overflow: hidden;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
-.webgl
-{
+html,
+body {
+    overflow: hidden;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.webgl {
     position: fixed;
     top: 0;
     left: 0;
     outline: none;
+}
+
+.command {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 1rem);
+    padding: .5rem;
+}
+
+.command__input {
+    all: unset;
+    background: rgba(0, 0, 0, .25);
+    color: #fff;
+    width: 100%;
+    padding: .5rem;
+    font-size: 1.25rem;
+    display: none;
 }
